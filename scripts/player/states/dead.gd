@@ -14,6 +14,7 @@ var _notified: bool = false
 func enter(_previous_state: StringName) -> void:
 	_timer = 0.0
 	_notified = false
+	player.play_anim(&"dead")
 	player.set_sword_active(false)
 	player.velocity = Vector2(0.0, -140.0)
 	player.hurtbox.set_deferred("monitoring", false)

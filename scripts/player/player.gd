@@ -18,7 +18,7 @@ const SWORD_OFFSET_X: float = 10.0
 var facing: int = 1  # 1 右，-1 左
 var last_damage_source: Vector2 = Vector2.ZERO
 
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var sprite: AnimatedSprite2D = $Sprite2D
 @onready var hurtbox: Hurtbox = $Hurtbox
 @onready var sword_hitbox: Hitbox = $SwordHitbox
 @onready var wall_ray_right: RayCast2D = $WallRayRight
@@ -29,8 +29,9 @@ var last_damage_source: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
-	sprite.texture = PlaceholderTexture.make(Vector2i(12, 20), Color(0.2, 0.4, 1.0))
-	sprite.offset = Vector2(0, -1)  # 脚对齐碰撞体底部
+	sprite.sprite_frames = GameAssets.player_frames()
+	sprite.offset = Vector2(0, -3)  # 脚对齐碰撞体底部
+	play_anim(&"idle")
 	hurtbox.hit_received.connect(_on_hurtbox_hit)
 	health.damaged.connect(_on_health_damaged)
 	health.died.connect(_on_health_died)
@@ -74,6 +75,15 @@ func is_dead() -> bool:
 
 func set_sword_active(on: bool) -> void:
 	sword_hitbox.set_active(on)
+
+
+func play_anim(anim: StringName) -> void:
+	if sprite == null or sprite.sprite_frames == null:
+		return
+	if not sprite.sprite_frames.has_animation(anim):
+		return
+	if sprite.animation != anim or not sprite.is_playing():
+		sprite.play(anim)
 
 
 func face(dir: int) -> void:

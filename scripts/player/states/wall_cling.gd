@@ -9,6 +9,7 @@ var _wall_dir: int = 1  # 墙所在方向（1 右，-1 左）
 
 
 func enter(_previous_state: StringName) -> void:
+	player.play_anim(&"climb")
 	_wall_dir = player.get_wall_dir()
 	if _wall_dir == 0:
 		_wall_dir = player.facing

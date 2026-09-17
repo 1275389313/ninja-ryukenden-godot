@@ -13,6 +13,8 @@ var _timer: float = 0.0
 
 func enter(_previous_state: StringName) -> void:
 	_timer = 0.0
+	player.play_anim(&"attack")
+	GameAudio.play_sfx("attack")
 	player.set_sword_active(true)
 	if player.is_on_floor():
 		player.velocity.x = 0.0

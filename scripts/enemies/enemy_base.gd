@@ -21,7 +21,7 @@ var player: Node2D
 
 var _flash_time_left: float = 0.0
 
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var sprite: AnimatedSprite2D = $Sprite2D
 @onready var body_shape: CollisionShape2D = $CollisionShape2D
 @onready var hitbox: Hitbox = $Hitbox
 @onready var hurtbox: Hurtbox = $Hurtbox
@@ -109,11 +109,21 @@ func is_flashing() -> bool:
 	return _flash_time_left > 0.0
 
 
+func play_anim(anim: StringName) -> void:
+	if sprite == null or sprite.sprite_frames == null:
+		return
+	if not sprite.sprite_frames.has_animation(anim):
+		return
+	if sprite.animation != anim or not sprite.is_playing():
+		sprite.play(anim)
+
+
 # ---- 信号回调 ----
 
 func _on_health_damaged(_amount: int, _source_position: Vector2) -> void:
 	_flash_time_left = FLASH_DURATION
 	sprite.modulate = Color(1.0, 0.3, 0.3)
+	GameAudio.play_sfx("hit")
 
 
 func _on_health_died() -> void:

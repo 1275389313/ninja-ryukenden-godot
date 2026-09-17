@@ -9,6 +9,7 @@ var _move_dir: int = 1
 
 
 func enter(_previous_state: StringName) -> void:
+	enemy.play_anim(&"run")
 	_move_dir = 1
 	if enemy.player != null and is_instance_valid(enemy.player):
 		if enemy.player.global_position.x < enemy.global_position.x:

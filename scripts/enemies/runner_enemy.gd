@@ -13,7 +13,9 @@ func _init() -> void:
 
 func _ready() -> void:
 	super._ready()
-	sprite.texture = PlaceholderTexture.make(Vector2i(12, 12), Color(0.9, 0.2, 0.2))
+	sprite.sprite_frames = GameAssets.runner_frames()
+	sprite.offset = Vector2(0, -2)
+	play_anim(&"run")
 
 
 func get_initial_state() -> StringName:

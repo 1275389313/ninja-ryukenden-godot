@@ -6,6 +6,10 @@ var player: Player:
 		return host as Player
 
 
+func enter(_previous_state: StringName) -> void:
+	player.play_anim(&"run")
+
+
 func state_physics_process(delta: float) -> void:
 	var axis := Input.get_axis("move_left", "move_right")
 	if not is_zero_approx(axis):

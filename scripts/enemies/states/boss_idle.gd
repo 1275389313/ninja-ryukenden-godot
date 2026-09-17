@@ -6,6 +6,10 @@ var boss: Boss:
 		return host as Boss
 
 
+func enter(_previous_state: StringName) -> void:
+	boss.play_anim(&"idle")
+
+
 func state_physics_process(delta: float) -> void:
 	boss.velocity.x = 0.0
 	boss.velocity.y += EnemyBase.GRAVITY * delta

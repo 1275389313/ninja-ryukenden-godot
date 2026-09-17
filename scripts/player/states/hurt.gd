@@ -10,6 +10,8 @@ var _timer: float = 0.0
 
 func enter(_previous_state: StringName) -> void:
 	_timer = 0.0
+	player.play_anim(&"hurt")
+	GameAudio.play_sfx("hurt")
 	player.set_sword_active(false)
 	# 伤害来源在右侧则向左击退，反之向右
 	var dir := -1 if player.last_damage_source.x > player.global_position.x else 1

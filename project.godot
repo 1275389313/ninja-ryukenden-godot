@@ -22,6 +22,8 @@ config/features=PackedStringArray("4.6")
 
 GameEvents="*res://scripts/autoload/game_events.gd"
 GameManager="*res://scripts/autoload/game_manager.gd"
+GameAssets="*res://scripts/autoload/game_assets.gd"
+GameAudio="*res://scripts/autoload/game_audio.gd"
 
 [display]
 

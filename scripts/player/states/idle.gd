@@ -6,6 +6,10 @@ var player: Player:
 		return host as Player
 
 
+func enter(_previous_state: StringName) -> void:
+	player.play_anim(&"idle")
+
+
 func state_physics_process(delta: float) -> void:
 	player.velocity.x = move_toward(player.velocity.x, 0.0, 800.0 * delta)
 	player.velocity.y += Player.GRAVITY * delta
