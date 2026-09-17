@@ -83,7 +83,7 @@ func audio(rel_path: String, loop: bool = false) -> AudioStream:
 		if wav.stereo:
 			bytes_per_frame *= 2
 		if bytes_per_frame > 0:
-			wav.loop_end = wav.data.size() div bytes_per_frame
+			wav.loop_end = int(wav.data.size() / bytes_per_frame)
 		stream = wav
 	_audio_cache[cache_key] = stream
 	return stream
@@ -124,7 +124,7 @@ func frames_from_sheet(rel_path: String, frame_size: Vector2i, columns: int, ani
 			for idx in indices:
 				var i := int(idx)
 				var col := i % columns
-				var row := i div columns
+				var row := int(i / columns)
 				var atlas := AtlasTexture.new()
 				atlas.atlas = tex
 				atlas.filter_clip = true
@@ -199,10 +199,10 @@ func decorate_parallax(parallax: ParallaxBackground) -> void:
 			far.add_child(moon)
 	var near := parallax.get_node_or_null("NearLayer") as ParallaxLayer
 	if near != null:
-		_cover_color_rect(near, "GroundStrip", "tiles/ground.png", Color(0.08, 0.1, 0.14), false)
+		_cover_color_rect(near, "GroundStrip", "tiles/ground.png", Color(0.08, 0.1, 0.14))
 
 
-func _cover_color_rect(parent: Node, node_name: String, rel_path: String, fallback: Color, stretch_full: bool) -> void:
+func _cover_color_rect(parent: Node, node_name: String, rel_path: String, fallback: Color) -> void:
 	var rect := parent.get_node_or_null(node_name) as ColorRect
 	if rect == null or not has_sprite(rel_path):
 		return
@@ -216,11 +216,8 @@ func _cover_color_rect(parent: Node, node_name: String, rel_path: String, fallba
 	spr.name = node_name + "Sprite"
 	spr.centered = false
 	spr.position = Vector2(rect.offset_left, rect.offset_top)
-	var src := texture(rel_path, Vector2i(maxi(1, w), maxi(1, h)) if stretch_full else TILE_FRAME, fallback)
-	if stretch_full:
-		spr.texture = make_tiled(src, Vector2i(w, h))
-	else:
-		spr.texture = make_tiled(src, Vector2i(w, h))
+	var src := texture(rel_path, TILE_FRAME, fallback)
+	spr.texture = make_tiled(src, Vector2i(w, h))
 	parent.add_child(spr)
 	parent.move_child(spr, rect.get_index())
 	rect.visible = false

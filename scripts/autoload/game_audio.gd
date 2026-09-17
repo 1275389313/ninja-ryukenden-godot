@@ -20,7 +20,7 @@ func _ready() -> void:
 
 
 func play_sfx(sfx_name: String) -> void:
-	var stream := GameAssets.audio("sfx/%s.wav" % sfx_name)
+	var stream: AudioStream = GameAssets.audio("sfx/%s.wav" % sfx_name)
 	if stream == null:
 		return
 	var voice := _free_sfx_player()
@@ -31,7 +31,7 @@ func play_sfx(sfx_name: String) -> void:
 
 
 func play_bgm(track_name: String) -> void:
-	var stream := GameAssets.audio("bgm/%s.wav" % track_name, true)
+	var stream: AudioStream = GameAssets.audio("bgm/%s.wav" % track_name, true)
 	if stream == null:
 		stop_bgm()
 		return
