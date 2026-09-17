@@ -1,0 +1,11 @@
+# Godot 4 缓存与自动生成文件
+.godot/
+*.tmp
+*.translation
+
+# 导入的临时文件
+*.import/
+
+# 导出构建
+export/
+build/

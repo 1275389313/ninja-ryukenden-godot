@@ -1,0 +1,74 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/boss.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/components/hitbox.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/components/hurtbox.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/components/health.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/fsm/state_machine.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/enemies/states/boss_idle.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/enemies/states/boss_walk.gd" id="7"]
+[ext_resource type="Script" path="res://scripts/enemies/states/boss_attack.gd" id="8"]
+[ext_resource type="Script" path="res://scripts/enemies/states/boss_dead.gd" id="9"]
+
+[sub_resource type="RectangleShape2D" id="body"]
+size = Vector2(14, 22)
+
+[sub_resource type="RectangleShape2D" id="attack"]
+size = Vector2(20, 16)
+
+[node name="Boss" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("body")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 64
+script = ExtResource("2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("body")
+
+[node name="AttackHitbox" type="Area2D" parent="."]
+position = Vector2(14, 0)
+collision_layer = 32
+collision_mask = 64
+monitoring = false
+monitorable = false
+script = ExtResource("2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
+shape = SubResource("attack")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 8
+script = ExtResource("3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("body")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("4")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("5")
+host_path = NodePath("..")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("6")
+
+[node name="Walk" type="Node" parent="StateMachine"]
+script = ExtResource("7")
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("8")
+
+[node name="Dead" type="Node" parent="StateMachine"]
+script = ExtResource("9")

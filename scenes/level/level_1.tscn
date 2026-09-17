@@ -1,0 +1,408 @@
+[gd_scene load_steps=21 format=3]
+
+[ext_resource type="Script" path="res://scripts/level/level_1.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/level/kill_zone.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/enemies/enemy_pool.gd" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/spawn_trigger.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/boss.tscn" id="6"]
+[ext_resource type="Script" path="res://scripts/level/boss_trigger.gd" id="7"]
+
+[sub_resource type="RectangleShape2D" id="ground_g1"]
+size = Vector2(512, 24)
+
+[sub_resource type="RectangleShape2D" id="ground_g2"]
+size = Vector2(448, 24)
+
+[sub_resource type="RectangleShape2D" id="ground_g3"]
+size = Vector2(176, 24)
+
+[sub_resource type="RectangleShape2D" id="ground_g4"]
+size = Vector2(1040, 24)
+
+[sub_resource type="RectangleShape2D" id="plat"]
+size = Vector2(64, 16)
+
+[sub_resource type="RectangleShape2D" id="step_small"]
+size = Vector2(32, 24)
+
+[sub_resource type="RectangleShape2D" id="wall_climb"]
+size = Vector2(32, 120)
+
+[sub_resource type="RectangleShape2D" id="step_wide"]
+size = Vector2(48, 24)
+
+[sub_resource type="RectangleShape2D" id="step_tall"]
+size = Vector2(32, 40)
+
+[sub_resource type="RectangleShape2D" id="bound"]
+size = Vector2(16, 240)
+
+[sub_resource type="RectangleShape2D" id="killzone"]
+size = Vector2(64, 80)
+
+[sub_resource type="RectangleShape2D" id="trigger_area"]
+size = Vector2(40, 200)
+
+[sub_resource type="RectangleShape2D" id="boss_trigger_area"]
+size = Vector2(24, 240)
+
+[node name="Level1" type="Node2D"]
+script = ExtResource("1")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+layer = -10
+
+[node name="FarLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.2, 1)
+
+[node name="Sky" type="ColorRect" parent="ParallaxBackground/FarLayer"]
+offset_right = 688.0
+offset_bottom = 240.0
+color = Color(0.05, 0.06, 0.12, 1)
+
+[node name="FarMountains" type="Polygon2D" parent="ParallaxBackground/FarLayer"]
+color = Color(0.1, 0.13, 0.24, 1)
+polygon = PackedVector2Array(0, 240, 0, 150, 60, 105, 130, 160, 200, 95, 280, 155, 350, 110, 430, 165, 500, 100, 580, 155, 650, 115, 688, 160, 688, 240)
+
+[node name="NearLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.5, 1)
+
+[node name="NearMountains" type="Polygon2D" parent="ParallaxBackground/NearLayer"]
+color = Color(0.15, 0.18, 0.26, 1)
+polygon = PackedVector2Array(0, 240, 0, 185, 80, 140, 160, 195, 250, 130, 340, 190, 430, 145, 520, 200, 610, 135, 700, 190, 790, 150, 880, 200, 970, 140, 1060, 195, 1150, 155, 1230, 200, 1312, 160, 1312, 240)
+
+[node name="GroundStrip" type="ColorRect" parent="ParallaxBackground/NearLayer"]
+offset_top = 216.0
+offset_right = 1312.0
+offset_bottom = 240.0
+color = Color(0.08, 0.1, 0.14, 1)
+
+[node name="Terrain" type="Node2D" parent="."]
+
+[node name="Ground1" type="StaticBody2D" parent="Terrain"]
+position = Vector2(256, 228)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Ground1"]
+shape = SubResource("ground_g1")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/Ground1"]
+color = Color(0.23, 0.17, 0.18, 1)
+polygon = PackedVector2Array(-256, -12, 256, -12, 256, 12, -256, 12)
+
+[node name="Ground2" type="StaticBody2D" parent="Terrain"]
+position = Vector2(800, 228)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Ground2"]
+shape = SubResource("ground_g2")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/Ground2"]
+color = Color(0.23, 0.17, 0.18, 1)
+polygon = PackedVector2Array(-224, -12, 224, -12, 224, 12, -224, 12)
+
+[node name="Ground3" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1112, 228)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Ground3"]
+shape = SubResource("ground_g3")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/Ground3"]
+color = Color(0.23, 0.17, 0.18, 1)
+polygon = PackedVector2Array(-88, -12, 88, -12, 88, 12, -88, 12)
+
+[node name="Ground4" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1784, 228)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Ground4"]
+shape = SubResource("ground_g4")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/Ground4"]
+color = Color(0.23, 0.17, 0.18, 1)
+polygon = PackedVector2Array(-520, -12, 520, -12, 520, 12, -520, 12)
+
+[node name="StartStep" type="StaticBody2D" parent="Terrain"]
+position = Vector2(288, 204)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/StartStep"]
+shape = SubResource("step_small")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/StartStep"]
+color = Color(0.23, 0.17, 0.18, 1)
+polygon = PackedVector2Array(-16, -12, 16, -12, 16, 12, -16, 12)
+
+[node name="FloatPlat1" type="StaticBody2D" parent="Terrain"]
+position = Vector2(352, 168)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/FloatPlat1"]
+shape = SubResource("plat")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/FloatPlat1"]
+color = Color(0.26, 0.2, 0.21, 1)
+polygon = PackedVector2Array(-32, -8, 32, -8, 32, 8, -32, 8)
+
+[node name="FloatPlat2" type="StaticBody2D" parent="Terrain"]
+position = Vector2(448, 128)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/FloatPlat2"]
+shape = SubResource("plat")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/FloatPlat2"]
+color = Color(0.26, 0.2, 0.21, 1)
+polygon = PackedVector2Array(-32, -8, 32, -8, 32, 8, -32, 8)
+
+[node name="DropPlat1" type="StaticBody2D" parent="Terrain"]
+position = Vector2(832, 144)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/DropPlat1"]
+shape = SubResource("plat")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/DropPlat1"]
+color = Color(0.26, 0.2, 0.21, 1)
+polygon = PackedVector2Array(-32, -8, 32, -8, 32, 8, -32, 8)
+
+[node name="DropPlat2" type="StaticBody2D" parent="Terrain"]
+position = Vector2(928, 184)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/DropPlat2"]
+shape = SubResource("plat")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/DropPlat2"]
+color = Color(0.26, 0.2, 0.21, 1)
+polygon = PackedVector2Array(-32, -8, 32, -8, 32, 8, -32, 8)
+
+[node name="Plat1" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1088, 184)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Plat1"]
+shape = SubResource("plat")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/Plat1"]
+color = Color(0.26, 0.2, 0.21, 1)
+polygon = PackedVector2Array(-32, -8, 32, -8, 32, 8, -32, 8)
+
+[node name="Plat2" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1184, 144)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Plat2"]
+shape = SubResource("plat")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/Plat2"]
+color = Color(0.26, 0.2, 0.21, 1)
+polygon = PackedVector2Array(-32, -8, 32, -8, 32, 8, -32, 8)
+
+[node name="Plat3" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1344, 184)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Plat3"]
+shape = SubResource("plat")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/Plat3"]
+color = Color(0.26, 0.2, 0.21, 1)
+polygon = PackedVector2Array(-32, -8, 32, -8, 32, 8, -32, 8)
+
+[node name="Plat4" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1440, 144)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Plat4"]
+shape = SubResource("plat")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/Plat4"]
+color = Color(0.26, 0.2, 0.21, 1)
+polygon = PackedVector2Array(-32, -8, 32, -8, 32, 8, -32, 8)
+
+[node name="Step1" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1592, 204)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Step1"]
+shape = SubResource("step_wide")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/Step1"]
+color = Color(0.23, 0.17, 0.18, 1)
+polygon = PackedVector2Array(-24, -12, 24, -12, 24, 12, -24, 12)
+
+[node name="Step2" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1680, 196)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Step2"]
+shape = SubResource("step_tall")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/Step2"]
+color = Color(0.23, 0.17, 0.18, 1)
+polygon = PackedVector2Array(-16, -20, 16, -20, 16, 20, -16, 20)
+
+[node name="BoundLeft" type="StaticBody2D" parent="Terrain"]
+position = Vector2(-8, 120)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/BoundLeft"]
+shape = SubResource("bound")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/BoundLeft"]
+color = Color(0.1, 0.08, 0.1, 1)
+polygon = PackedVector2Array(-8, -120, 8, -120, 8, 120, -8, 120)
+
+[node name="BoundRight" type="StaticBody2D" parent="Terrain"]
+position = Vector2(2312, 120)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/BoundRight"]
+shape = SubResource("bound")
+
+[node name="Polygon2D" type="Polygon2D" parent="Terrain/BoundRight"]
+color = Color(0.1, 0.08, 0.1, 1)
+polygon = PackedVector2Array(-8, -120, 8, -120, 8, 120, -8, 120)
+
+[node name="WallClimb" type="StaticBody2D" parent="."]
+position = Vector2(752, 156)
+collision_layer = 256
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallClimb"]
+shape = SubResource("wall_climb")
+
+[node name="Polygon2D" type="Polygon2D" parent="WallClimb"]
+color = Color(0.16, 0.24, 0.26, 1)
+polygon = PackedVector2Array(-16, -60, 16, -60, 16, 60, -16, 60)
+
+[node name="KillZone1" type="Area2D" parent="."]
+position = Vector2(544, 280)
+collision_layer = 128
+collision_mask = 2
+script = ExtResource("3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone1"]
+shape = SubResource("killzone")
+
+[node name="KillZone2" type="Area2D" parent="."]
+position = Vector2(1232, 280)
+collision_layer = 128
+collision_mask = 2
+script = ExtResource("3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone2"]
+shape = SubResource("killzone")
+
+[node name="EnemyPool" type="Node2D" parent="."]
+script = ExtResource("4")
+
+[node name="SpawnTrigger1" parent="." instance=ExtResource("5")]
+position = Vector2(260, 216)
+enemy_type = &"runner"
+spawn_offset = Vector2(180, -16)
+spawn_once = true
+
+[node name="CollisionShape2D" parent="SpawnTrigger1" index="0"]
+shape = SubResource("trigger_area")
+
+[node name="SpawnTrigger2" parent="." instance=ExtResource("5")]
+position = Vector2(520, 216)
+enemy_type = &"flyer"
+spawn_offset = Vector2(180, -70)
+spawn_once = true
+
+[node name="CollisionShape2D" parent="SpawnTrigger2" index="0"]
+shape = SubResource("trigger_area")
+
+[node name="SpawnTrigger3" parent="." instance=ExtResource("5")]
+position = Vector2(710, 216)
+enemy_type = &"runner"
+spawn_offset = Vector2(180, -16)
+spawn_once = true
+
+[node name="CollisionShape2D" parent="SpawnTrigger3" index="0"]
+shape = SubResource("trigger_area")
+
+[node name="SpawnTrigger4" parent="." instance=ExtResource("5")]
+position = Vector2(1060, 216)
+enemy_type = &"flyer"
+spawn_offset = Vector2(180, -60)
+spawn_once = true
+
+[node name="CollisionShape2D" parent="SpawnTrigger4" index="0"]
+shape = SubResource("trigger_area")
+
+[node name="SpawnTrigger5" parent="." instance=ExtResource("5")]
+position = Vector2(1290, 216)
+enemy_type = &"runner"
+spawn_offset = Vector2(180, -16)
+spawn_once = true
+
+[node name="CollisionShape2D" parent="SpawnTrigger5" index="0"]
+shape = SubResource("trigger_area")
+
+[node name="SpawnTrigger6" parent="." instance=ExtResource("5")]
+position = Vector2(1380, 216)
+enemy_type = &"runner"
+spawn_offset = Vector2(180, -16)
+spawn_once = true
+
+[node name="CollisionShape2D" parent="SpawnTrigger6" index="0"]
+shape = SubResource("trigger_area")
+
+[node name="SpawnTrigger7" parent="." instance=ExtResource("5")]
+position = Vector2(1580, 216)
+enemy_type = &"flyer"
+spawn_offset = Vector2(180, -70)
+spawn_once = true
+
+[node name="CollisionShape2D" parent="SpawnTrigger7" index="0"]
+shape = SubResource("trigger_area")
+
+[node name="BossArenaMarker" type="Node2D" parent="."]
+position = Vector2(2048, 216)
+
+[node name="BossTrigger" type="Area2D" parent="."]
+position = Vector2(1820, 120)
+collision_layer = 128
+collision_mask = 2
+script = ExtResource("7")
+boss_path = NodePath("../Boss")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossTrigger"]
+shape = SubResource("boss_trigger_area")
+
+[node name="Boss" parent="." instance=ExtResource("6")]
+position = Vector2(2120, 205)
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(40, 196)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(128, 120)
+enabled = true
+limit_left = 0
+limit_top = 0
+limit_right = 2304
+limit_bottom = 240
