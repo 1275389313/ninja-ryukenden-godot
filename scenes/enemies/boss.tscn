@@ -13,6 +13,9 @@
 [sub_resource type="RectangleShape2D" id="body"]
 size = Vector2(14, 22)
 
+[sub_resource type="RectangleShape2D" id="hurt"]
+size = Vector2(20, 26)
+
 [sub_resource type="RectangleShape2D" id="attack"]
 size = Vector2(20, 16)
 
@@ -51,7 +54,7 @@ collision_mask = 8
 script = ExtResource("3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
-shape = SubResource("body")
+shape = SubResource("hurt")
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("4")
