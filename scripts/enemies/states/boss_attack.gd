@@ -17,6 +17,8 @@ var _phase: int = 0  # 0 抬手，1 判定，2 收招
 func enter(_previous_state: StringName) -> void:
 	_timer = 0.0
 	_phase = 0
+	boss.play_anim(&"attack")
+	GameAudio.play_sfx("attack")
 	boss.velocity.x = 0.0
 	# 出手前面向玩家，攻击判定放在身前
 	if boss.player != null and is_instance_valid(boss.player):

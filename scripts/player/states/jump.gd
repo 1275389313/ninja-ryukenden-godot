@@ -12,6 +12,8 @@ var _cling_lock: float = 0.0
 
 
 func enter(previous_state: StringName) -> void:
+	player.play_anim(&"jump")
+	GameAudio.play_sfx("jump")
 	if previous_state == &"wallcling":
 		_cling_lock = RECLING_LOCK
 	else:

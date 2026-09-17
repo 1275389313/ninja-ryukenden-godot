@@ -22,8 +22,9 @@ func _init() -> void:
 
 func _ready() -> void:
 	super._ready()
-	sprite.texture = PlaceholderTexture.make(Vector2i(16, 24), Color(1.0, 0.55, 0.1))
-	sprite.offset = Vector2(0, -1)  # 脚对齐碰撞体底部
+	sprite.sprite_frames = GameAssets.boss_frames()
+	sprite.offset = Vector2(0, -5)  # 脚对齐碰撞体底部
+	play_anim(&"idle")
 	attack_hitbox.damage = damage
 
 

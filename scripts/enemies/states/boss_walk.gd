@@ -6,6 +6,10 @@ var boss: Boss:
 		return host as Boss
 
 
+func enter(_previous_state: StringName) -> void:
+	boss.play_anim(&"walk")
+
+
 func state_physics_process(delta: float) -> void:
 	if boss.player != null and is_instance_valid(boss.player):
 		var dx: float = boss.player.global_position.x - boss.global_position.x

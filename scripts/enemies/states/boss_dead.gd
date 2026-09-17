@@ -18,6 +18,7 @@ func enter(_previous_state: StringName) -> void:
 	_timer = 0.0
 	_defeated_emitted = false
 	_clear_called = false
+	boss.play_anim(&"dead")
 	boss.velocity = Vector2.ZERO
 	boss.sprite.modulate = Color.WHITE
 	# 关闭全部判定（可能在物理回调中进入，统一走 deferred）

@@ -10,6 +10,7 @@ var _time: float = 0.0
 
 
 func enter(_previous_state: StringName) -> void:
+	enemy.play_anim(&"fly")
 	_move_dir = 1
 	_time = 0.0
 	if enemy.player != null and is_instance_valid(enemy.player):

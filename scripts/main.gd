@@ -47,6 +47,7 @@ func start_game() -> void:
 	add_child(_level)
 	_hud.reset()
 	_hud.visible = true
+	GameAudio.play_bgm("level")
 
 
 func back_to_title() -> void:
@@ -69,6 +70,7 @@ func _show_title_screen() -> void:
 	_state = FlowState.TITLE
 	_screen = TITLE_SCREEN_SCENE.instantiate()
 	add_child(_screen)
+	GameAudio.play_bgm("level")
 
 
 func _show_game_over_screen() -> void:
@@ -77,6 +79,7 @@ func _show_game_over_screen() -> void:
 	_state = FlowState.GAME_OVER
 	_free_level()
 	_hud.visible = false
+	GameAudio.stop_bgm()
 	_screen = GAME_OVER_SCREEN_SCENE.instantiate()
 	add_child(_screen)
 
@@ -87,6 +90,7 @@ func _show_clear_screen() -> void:
 	_state = FlowState.CLEAR
 	_free_level()
 	_hud.visible = false
+	GameAudio.stop_bgm()
 	# 不做静态类型标注：set_score() 是脚本方法，静态类型会被推断为 Node 而导致编译错误
 	var clear_screen = CLEAR_SCREEN_SCENE.instantiate()
 	add_child(clear_screen)

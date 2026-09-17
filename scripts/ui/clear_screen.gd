@@ -9,6 +9,19 @@ const BLINK_INTERVAL := 0.5
 var _blink_timer: float = 0.0
 
 
+func _ready() -> void:
+	if GameAssets.has_sprite("bg/sky.png"):
+		var sky := TextureRect.new()
+		sky.set_anchors_preset(Control.PRESET_FULL_RECT)
+		sky.grow_horizontal = Control.GROW_DIRECTION_BOTH
+		sky.grow_vertical = Control.GROW_DIRECTION_BOTH
+		sky.texture = GameAssets.texture("bg/sky.png", Vector2i(256, 240), Color(0.02, 0.02, 0.08))
+		sky.stretch_mode = TextureRect.STRETCH_SCALE
+		sky.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(sky)
+		move_child(sky, 1)
+
+
 func _process(delta: float) -> void:
 	_blink_timer += delta
 	if _blink_timer >= BLINK_INTERVAL:

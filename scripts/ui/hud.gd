@@ -16,13 +16,17 @@ const BOSS_OFF_COLOR := Color(0.25, 0.1, 0.1)
 @onready var _time_label: Label = $TopBar/TimeLabel
 @onready var _lives_label: Label = $TopBar/LivesLabel
 
-var _player_cells: Array[ColorRect] = []
-var _boss_cells: Array[ColorRect] = []
+var _player_cells: Array[Control] = []
+var _boss_cells: Array[Control] = []
+var _player_pip: Texture2D
+var _boss_pip: Texture2D
 
 
 func _ready() -> void:
-	_build_cells(_player_box, _player_cells, PLAYER_CELL_COUNT, PLAYER_ON_COLOR)
-	_build_cells(_boss_box, _boss_cells, BOSS_CELL_COUNT, BOSS_ON_COLOR)
+	_player_pip = GameAssets.texture("ui/health_pip.png", Vector2i(6, 4), PLAYER_ON_COLOR)
+	_boss_pip = GameAssets.texture("ui/boss_pip.png", Vector2i(6, 4), BOSS_ON_COLOR)
+	_build_cells(_player_box, _player_cells, PLAYER_CELL_COUNT, _player_pip, PLAYER_ON_COLOR)
+	_build_cells(_boss_box, _boss_cells, BOSS_CELL_COUNT, _boss_pip, BOSS_ON_COLOR)
 	GameEvents.player_health_changed.connect(_on_player_health_changed)
 	GameEvents.player_lives_changed.connect(_on_player_lives_changed)
 	GameEvents.score_changed.connect(_on_score_changed)
@@ -37,22 +41,24 @@ func _ready() -> void:
 	_on_player_health_changed(PLAYER_CELL_COUNT, PLAYER_CELL_COUNT)
 
 
-func _build_cells(box: HBoxContainer, out: Array[ColorRect], count: int, on_color: Color) -> void:
+func _build_cells(box: HBoxContainer, out: Array[Control], count: int, pip: Texture2D, _on_color: Color) -> void:
 	for i in count:
-		var cell := ColorRect.new()
+		var cell := TextureRect.new()
 		cell.custom_minimum_size = CELL_SIZE
-		cell.color = on_color
+		cell.texture = pip
+		cell.stretch_mode = TextureRect.STRETCH_SCALE
+		cell.modulate = Color.WHITE
 		box.add_child(cell)
 		out.append(cell)
 
 
-func _update_cells(cells: Array[ColorRect], current: int, on_color: Color, off_color: Color) -> void:
+func _update_cells(cells: Array[Control], current: int, _on_color: Color, _off_color: Color, _pip_rel: String) -> void:
 	for i in cells.size():
-		cells[i].color = on_color if i < current else off_color
+		cells[i].modulate = Color.WHITE if i < current else Color(0.22, 0.22, 0.28, 1.0)
 
 
 func _on_player_health_changed(current: int, _max_value: int) -> void:
-	_update_cells(_player_cells, clampi(current, 0, PLAYER_CELL_COUNT), PLAYER_ON_COLOR, PLAYER_OFF_COLOR)
+	_update_cells(_player_cells, clampi(current, 0, PLAYER_CELL_COUNT), PLAYER_ON_COLOR, PLAYER_OFF_COLOR, "ui/health_pip.png")
 
 
 func _on_player_lives_changed(lives: int) -> void:
@@ -77,7 +83,7 @@ func _on_boss_fight_started() -> void:
 
 
 func _on_boss_health_changed(current: int, _max_value: int) -> void:
-	_update_cells(_boss_cells, clampi(current, 0, BOSS_CELL_COUNT), BOSS_ON_COLOR, BOSS_OFF_COLOR)
+	_update_cells(_boss_cells, clampi(current, 0, BOSS_CELL_COUNT), BOSS_ON_COLOR, BOSS_OFF_COLOR, "ui/boss_pip.png")
 
 
 func _on_boss_defeated() -> void:
