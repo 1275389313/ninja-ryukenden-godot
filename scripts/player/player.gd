@@ -13,7 +13,7 @@ const HURT_DURATION: float = 0.4
 const INVINCIBLE_DURATION: float = 1.0
 const ATTACK_DURATION: float = 0.25
 
-const SWORD_OFFSET_X: float = 10.0
+const SWORD_OFFSET_X: float = 12.0
 
 var facing: int = 1  # 1 右，-1 左
 var last_damage_source: Vector2 = Vector2.ZERO

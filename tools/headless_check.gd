@@ -30,6 +30,7 @@ func _init() -> void:
 	failed += _expect(ga.call("audio", "sfx/does_not_exist.wav") == null, "missing sfx should be null")
 	var missing_tex: Texture2D = ga.call("texture", "no/such.png", Vector2i(8, 8), Color.MAGENTA)
 	failed += _expect(missing_tex != null, "missing texture should still return placeholder")
+	failed += _expect_melee_reaches_boss()
 
 	if failed == 0:
 		print("HEADLESS_CHECK_OK")
@@ -44,3 +45,22 @@ func _expect(cond: bool, msg: String) -> int:
 		return 0
 	push_error("FAIL: " + msg)
 	return 1
+
+
+func _expect_melee_reaches_boss() -> int:
+	# --script 不加载项目 autoload，不能 instantiate 玩家/Boss 场景；直接读 tscn。
+	var player_txt := FileAccess.get_file_as_string("res://scenes/player/player.tscn")
+	var boss_txt := FileAccess.get_file_as_string("res://scenes/enemies/boss.tscn")
+	var player_gd := FileAccess.get_file_as_string("res://scripts/player/player.gd")
+	var failed := 0
+	failed += _expect(player_txt.contains("size = Vector2(18, 14)"), "player sword shape 18x14")
+	failed += _expect(player_txt.contains("position = Vector2(12, 0)"), "player sword offset 12")
+	failed += _expect(player_gd.contains("SWORD_OFFSET_X: float = 12.0"), "SWORD_OFFSET_X is 12")
+	failed += _expect(boss_txt.contains("size = Vector2(20, 26)"), "boss hurtbox 20x26")
+	# 剑右缘 12+9=21，Boss 受击半宽 10，合计 31 >= Boss.ATTACK_RANGE 28
+	var sword_reach := 12.0 + 18.0 * 0.5
+	var hurt_half := 20.0 * 0.5
+	failed += _expect(sword_reach + hurt_half >= 28.0, "sword+boss hurtbox should reach ATTACK_RANGE")
+	failed += _expect(player_txt.contains("collision_layer = 8") and player_txt.contains("collision_mask = 16"), "player sword layers")
+	failed += _expect(boss_txt.contains("collision_layer = 16") and boss_txt.contains("collision_mask = 8"), "boss hurtbox layers")
+	return failed
