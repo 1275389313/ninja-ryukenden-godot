@@ -31,6 +31,7 @@ func _init() -> void:
 	var missing_tex: Texture2D = ga.call("texture", "no/such.png", Vector2i(8, 8), Color.MAGENTA)
 	failed += _expect(missing_tex != null, "missing texture should still return placeholder")
 	failed += _expect_melee_reaches_boss()
+	failed += _expect_pits_not_covered_by_parallax_ground()
 
 	if failed == 0:
 		print("HEADLESS_CHECK_OK")
@@ -64,3 +65,40 @@ func _expect_melee_reaches_boss() -> int:
 	failed += _expect(player_txt.contains("collision_layer = 8") and player_txt.contains("collision_mask = 16"), "player sword layers")
 	failed += _expect(boss_txt.contains("collision_layer = 16") and boss_txt.contains("collision_mask = 8"), "boss hurtbox layers")
 	return failed
+
+
+func _expect_pits_not_covered_by_parallax_ground() -> int:
+	# Walkable floor lives on Terrain Ground* bodies (y 216–240). A parallax
+	# GroundStrip or mountain fill in that band draws scrolling ground across pits.
+	const GROUND_TOP := 216.0
+	var level := FileAccess.get_file_as_string("res://scenes/level/level_1.tscn")
+	var assets := FileAccess.get_file_as_string("res://scripts/autoload/game_assets.gd")
+	var failed := 0
+	failed += _expect(not level.contains("GroundStrip"), "level must not draw a full-width parallax GroundStrip")
+	failed += _expect(not assets.contains("GroundStrip"), "decorate_parallax must not tile ground across a GroundStrip")
+	failed += _expect(level.contains("KillZone1") and level.contains("KillZone2"), "pit kill zones remain")
+	failed += _expect(_polygon_max_y(level, "FarMountains") <= GROUND_TOP, "FarMountains must stay above the ground/pit band")
+	failed += _expect(_polygon_max_y(level, "NearMountains") <= GROUND_TOP, "NearMountains must stay above the ground/pit band")
+	return failed
+
+
+func _polygon_max_y(tscn: String, node_name: String) -> float:
+	var marker := '[node name="%s"' % node_name
+	var i := tscn.find(marker)
+	if i < 0:
+		return 9999.0
+	var poly_i := tscn.find("polygon = PackedVector2Array(", i)
+	if poly_i < 0:
+		return 9999.0
+	var start := poly_i + String("polygon = PackedVector2Array(").length()
+	var end := tscn.find(")", start)
+	if end < 0:
+		return 9999.0
+	var nums := tscn.substr(start, end - start).split(", ")
+	var max_y := -INF
+	var idx := 0
+	for s in nums:
+		if idx % 2 == 1:
+			max_y = maxf(max_y, float(s))
+		idx += 1
+	return max_y

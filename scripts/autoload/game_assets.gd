@@ -197,9 +197,8 @@ func decorate_parallax(parallax: ParallaxBackground) -> void:
 			moon.position = Vector2(210, 36)
 			moon.centered = true
 			far.add_child(moon)
-	var near := parallax.get_node_or_null("NearLayer") as ParallaxLayer
-	if near != null:
-		_cover_color_rect(near, "GroundStrip", "tiles/ground.png", Color(0.08, 0.1, 0.14))
+	# NearLayer is distant scenery only. Never tile walkable ground.png here:
+	# a full-width strip ignores collision pits and scrolls, so holes look solid.
 
 
 func _cover_color_rect(parent: Node, node_name: String, rel_path: String, fallback: Color) -> void:

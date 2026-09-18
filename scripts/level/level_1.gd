@@ -50,6 +50,7 @@ func _snap_camera(target: Vector2) -> void:
 
 func _apply_level_art() -> void:
 	GameAssets.decorate_parallax(get_node_or_null("ParallaxBackground") as ParallaxBackground)
+	# Tile walkable art only onto Terrain colliders so pits stay empty (sky).
 	if terrain != null:
 		for child in terrain.get_children():
 			var poly := child.get_node_or_null("Polygon2D") as Polygon2D
