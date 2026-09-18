@@ -63,20 +63,14 @@ color = Color(0.05, 0.06, 0.12, 1)
 
 [node name="FarMountains" type="Polygon2D" parent="ParallaxBackground/FarLayer"]
 color = Color(0.1, 0.13, 0.24, 1)
-polygon = PackedVector2Array(0, 240, 0, 150, 60, 105, 130, 160, 200, 95, 280, 155, 350, 110, 430, 165, 500, 100, 580, 155, 650, 115, 688, 160, 688, 240)
+polygon = PackedVector2Array(0, 200, 0, 150, 60, 105, 130, 160, 200, 95, 280, 155, 350, 110, 430, 165, 500, 100, 580, 155, 650, 115, 688, 160, 688, 200)
 
 [node name="NearLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2(0.5, 1)
 
 [node name="NearMountains" type="Polygon2D" parent="ParallaxBackground/NearLayer"]
 color = Color(0.15, 0.18, 0.26, 1)
-polygon = PackedVector2Array(0, 240, 0, 185, 80, 140, 160, 195, 250, 130, 340, 190, 430, 145, 520, 200, 610, 135, 700, 190, 790, 150, 880, 200, 970, 140, 1060, 195, 1150, 155, 1230, 200, 1312, 160, 1312, 240)
-
-[node name="GroundStrip" type="ColorRect" parent="ParallaxBackground/NearLayer"]
-offset_top = 216.0
-offset_right = 1312.0
-offset_bottom = 240.0
-color = Color(0.08, 0.1, 0.14, 1)
+polygon = PackedVector2Array(0, 200, 0, 185, 80, 140, 160, 195, 250, 130, 340, 190, 430, 145, 520, 200, 610, 135, 700, 190, 790, 150, 880, 200, 970, 140, 1060, 195, 1150, 155, 1230, 200, 1312, 160, 1312, 200)
 
 [node name="Terrain" type="Node2D" parent="."]
 
